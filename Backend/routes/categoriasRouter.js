@@ -1,8 +1,9 @@
 var express = require('express');
 var router  = express.Router();
+const categoriasController = require('../controllers/categoriasController');
 
 /* GET categorias */
-router.get('', function(req, res, next){
+/*router.get('', function(req, res, next){
     res.json({categorias : [
         {
             id: 1,
@@ -14,5 +15,17 @@ router.get('', function(req, res, next){
         },
     ]});
 });
+*/
+
+router.get('', categoriasController.obtenerCategorias);
+
+router.get('/:id', categoriasController.obtenerCategoria);
+
+router.post('/create', categoriasController.crearCategoria);
+
+router.put('/update', categoriasController.actualizarCategoria);
+
+router.delete('/delete/:id', categoriasController.eliminarCategoria);
+
 
 module.exports = router;
