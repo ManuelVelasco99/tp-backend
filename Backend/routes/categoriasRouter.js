@@ -23,7 +23,7 @@ router.get('/:id', categoriasController.obtenerCategoria);
 
 router.post('/create', categoriasController.crearCategoria);
 
-router.put('/update', categoriasController.actualizarCategoria);
+router.put('/update/:id', categoriasController.actualizarCategoria);
 
 router.delete('/delete/:id', categoriasController.eliminarCategoria);
 
