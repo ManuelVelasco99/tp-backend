@@ -1,14 +1,19 @@
-const obtenerCategorias = (req, res, next) => {
-    res.json({categorias : [
-        {
-            id: 1,
-            descripcion: 'categoria 1'
-        },
-        {
-            id: 2,
-            descripcion: 'categoria 2',
-        },
-    ]});
+const Sequelize = require('sequelize');
+const categorias = require('../models').categoria;
+
+const obtenerCategorias = async (req, res, next) => {
+    try {
+        const response = await categorias.findAll({});
+        res.json({
+            listado_categorias: response
+        })
+    } 
+    catch (error) {
+        res.json({
+            message : error,
+        });
+    }
+
 }
 
 const obtenerCategoria = (req, res, next) => {
@@ -17,11 +22,22 @@ const obtenerCategoria = (req, res, next) => {
 }
 
 
-const crearCategoria = (req, res, next) => {
+const crearCategoria = async (req, res, next) => {
     const body = req.body;
-    res.json({
-        nuevaCategoria : body,
-    });
+    try {
+        const response = await categorias.create ({
+            descripcion : body.descripcion,
+        })
+        res.json({
+            nueva_categoria : response,
+        });
+    } 
+    catch (error) {
+        res.json({
+            message : error,
+        });
+    }
+    
 }
 
 const actualizarCategoria = (req, res, next) => {
