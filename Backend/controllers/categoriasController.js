@@ -1,5 +1,8 @@
-const Sequelize = require('sequelize');
 const categorias = require('../models').categoria;
+const { check,param, validationResult } = require('express-validator');
+const { status } = require('express/lib/response');
+
+
 
 const obtenerCategorias = async (req, res, next) => {
     try {
@@ -17,6 +20,14 @@ const obtenerCategorias = async (req, res, next) => {
 }
 
 const obtenerCategoria = async (req, res, next) => {
+    if(!validationResult(req).isEmpty()){
+        const result = validationResult(req);
+        return res.status(400).json({
+            status: 400,
+            error: 'Bad Request',
+            message: result.errors,
+        });
+    }
     const categoriaId = req.params.id;
     try {
         const response = await categorias.findByPk(categoriaId);
@@ -39,6 +50,14 @@ const obtenerCategoria = async (req, res, next) => {
 
 const crearCategoria = async (req, res, next) => {
     const body = req.body;
+    if(!validationResult(req).isEmpty()){
+        const result = validationResult(req);
+        return res.status(400).json({
+            status: 400,
+            error: 'Bad Request',
+            message: result.errors,
+        });
+    }
     try {
         const response = await categorias.create ({
             descripcion : body.descripcion,
@@ -57,6 +76,14 @@ const crearCategoria = async (req, res, next) => {
 
 const actualizarCategoria = async(req, res, next) => {
     const categoriaId = req.params.id;
+    if(!validationResult(req).isEmpty()){
+        const result = validationResult(req);
+        return res.status(400).json({
+            status: 400,
+            error: 'Bad Request',
+            message: result.errors,
+        });
+    }
     const nuevaDescripcion = req.body.descripcion;
     try {
         const response = await categorias.update(
@@ -81,6 +108,14 @@ const actualizarCategoria = async(req, res, next) => {
 
 const eliminarCategoria = async(req, res, next) => {
     const categoriaId = req.params.id;
+    if(!validationResult(req).isEmpty()){
+        const result = validationResult(req);
+        return res.status(400).json({
+            status: 400,
+            error: 'Bad Request',
+            message: result.errors,
+        });
+    }
     try {
         const response = await categorias.update(
             {eliminado: 1},
