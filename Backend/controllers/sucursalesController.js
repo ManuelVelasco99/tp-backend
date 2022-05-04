@@ -1,11 +1,11 @@
-const categorias = require('../models').categoria;
-const { check,param, validationResult } = require('express-validator');
+const sucursales = require('../models').Sucursales;
+const { validationResult } = require('express-validator');
 
-const obtenerCategorias = async (req, res, next) => {
+const obtenerSucursales = async (req, res, next) => {
     try {
-        const response = await categorias.findAll({});
+        const response = await sucursales.findAll({});
         return res.json({
-            listado_categorias: response
+            listado_sucursales: response
         })
     } 
     catch (error) {
@@ -16,7 +16,7 @@ const obtenerCategorias = async (req, res, next) => {
 
 }
 
-const obtenerCategoria = async (req, res, next) => {
+const obtenerSucursal = async (req, res, next) => {
     if(!validationResult(req).isEmpty()){
         const result = validationResult(req);
         return res.status(400).json({
@@ -25,16 +25,16 @@ const obtenerCategoria = async (req, res, next) => {
             message: result.errors,
         });
     }
-    const categoriaId = req.params.id;
+    const sucursalId = req.params.id;
     try {
-        const response = await categorias.findByPk(categoriaId);
+        const response = await sucursales.findByPk(sucursalId);
         if(response){
             return res.json({
-                categoria : response,
+                sucursal : response,
             });
         }
         return res.json({
-            message: 'Categoría no encontrada.'
+            message: 'Sucursal no encontrada.'
         });
     } 
     catch (error) {
@@ -45,7 +45,7 @@ const obtenerCategoria = async (req, res, next) => {
 }
 
 
-const crearCategoria = async (req, res, next) => {
+const crearSucursal = async (req, res, next) => {
     const body = req.body;
     if(!validationResult(req).isEmpty()){
         const result = validationResult(req);
@@ -56,11 +56,11 @@ const crearCategoria = async (req, res, next) => {
         });
     }
     try {
-        const response = await categorias.create ({
-            descripcion : body.descripcion,
+        const response = await sucursales.create ({
+            nombre : body.nombre,
         })
         return res.json({
-            nueva_categoria : response,
+            nueva_sucursal : response,
         });
     } 
     catch (error) {
@@ -71,8 +71,8 @@ const crearCategoria = async (req, res, next) => {
     
 }
 
-const actualizarCategoria = async(req, res, next) => {
-    const categoriaId = req.params.id;
+const actualizarSucursal = async(req, res, next) => {
+    const sucursalId = req.params.id;
     if(!validationResult(req).isEmpty()){
         const result = validationResult(req);
         return res.status(400).json({
@@ -81,19 +81,20 @@ const actualizarCategoria = async(req, res, next) => {
             message: result.errors,
         });
     }
-    const nuevaDescripcion = req.body.descripcion;
+    const nuevoNombre = req.body.nombre;
     try {
-        const [response] = await categorias.update(
-            {descripcion: nuevaDescripcion},
-            {where: {id: categoriaId}}
+        const [response] = await sucursales.update(
+            {nombre: nuevoNombre},
+            {where: {id: sucursalId}}
         );
         if(response === 0){
             return res.json({
-                message: 'No se pudo actualizar la categoría.',
+                message: 'No se pudo actualizar la sucursal.',
             });
         }
         return res.json({
-            message : 'Categoría actualizada con éxito',
+            message : 'Sucursal actualizada con éxito', 
+            response : response,
         });
     } 
     catch (error) {
@@ -103,8 +104,8 @@ const actualizarCategoria = async(req, res, next) => {
     }
 }
 
-const eliminarCategoria = async(req, res, next) => {
-    const categoriaId = req.params.id;
+const eliminarSucursal = async(req, res, next) => {
+    const sucursalId = req.params.id;
     if(!validationResult(req).isEmpty()){
         const result = validationResult(req);
         return res.status(400).json({
@@ -114,17 +115,17 @@ const eliminarCategoria = async(req, res, next) => {
         });
     }
     try {
-        const [response] = await categorias.update(
+        const [response] = await sucursales.update(
             {eliminado: 1},
-            {where: {id: categoriaId}}
+            {where: {id: sucursalId}}
         );
         if(response === 0){
             return res.json({
-                message: 'No se pudo eliminar la categoría.',
+                message: 'No se pudo eliminar la sucursal.',
             });
         }
         return res.json({
-            message : 'Categoría eliminada con éxito',
+            message : 'Sucursal eliminada con éxito',
         });
     } 
     catch (error) {
@@ -135,9 +136,9 @@ const eliminarCategoria = async(req, res, next) => {
 }
 
 module.exports = {
-    actualizarCategoria,
-    crearCategoria,
-    eliminarCategoria,
-    obtenerCategoria,
-    obtenerCategorias,
+    actualizarSucursal,
+    crearSucursal,
+    eliminarSucursal,
+    obtenerSucursal,
+    obtenerSucursales,
 }
